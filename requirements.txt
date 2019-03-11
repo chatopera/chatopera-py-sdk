@@ -1,0 +1,2 @@
+requests==2.18.4
+absl-py==0.1.10
