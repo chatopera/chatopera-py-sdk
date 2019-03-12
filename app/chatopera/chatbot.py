@@ -37,6 +37,19 @@ ENVIRON = os.environ.copy()
 
 import requests
 import json
+import hmac
+import hashlib
+import time
+import random
+import string
+
+def generate(appId, secret, method, path):
+    timestamp = bytes(int(time.time()))
+    rnd = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+    msg = appId + timestamp + rnd + method + path
+    h = hmac.new(secret, msg, hashlib.sha1)
+    signature = h.hexdigest()
+    return json.dumps({ 'appId':appId, 'timestamp':timestamp, 'random':rnd, 'signature':signature}).encode('base64')
 
 class Chatbot():
 
