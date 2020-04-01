@@ -34,21 +34,17 @@ if sys.version_info[0] < 3:
 else:
     unicode = str
 
-# Get ENV
-ENVIRON = os.environ.copy()
-
-from absl import flags   #absl-py
-from absl import logging #absl-py
-from absl import app #absl-py
-
 from chatopera import Chatbot
+import logging
 
-FLAGS = flags.FLAGS
-flags.DEFINE_string('bot_ip', '127.0.0.1', 'Chatopera Superbrain Service IP')
-flags.DEFINE_integer('bot_port', 8003, 'Chatopera Superbrain Service Port')
-flags.DEFINE_string('bot_id', 'test1', 'Connect to which Chatbot in Superbrain')
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO').upper()
+logging.basicConfig(level=LOG_LEVEL)
 
 import unittest
+
+BOT_PROVIDER = os.environ.get("BOT_PROVIDER", "https://bot.chatopera.com")
+BOT_APP_ID = os.environ.get("BOT_APP_ID", None)
+BOT_APP_SECRET = os.environ.get("BOT_APP_SECRET", None)
 
 # run testcase: python /Users/hain/chatopera/chatopera-py-sdk/test.py Test.testExample
 class Test(unittest.TestCase):
@@ -56,13 +52,13 @@ class Test(unittest.TestCase):
     
     '''
     def setUp(self):
-        self.bot = Chatbot(FLAGS.bot_ip, FLAGS.bot_port, FLAGS.bot_id)
+        self.bot = Chatbot(BOT_APP_ID, BOT_APP_SECRET, BOT_PROVIDER)
 
     def tearDown(self):
         pass
 
     def test_conversation(self):
-        logging.info("test_conversation %s:%d/api/v1/chatbot/%s", FLAGS.bot_ip, FLAGS.bot_port, FLAGS.bot_id)
+        logging.info("test_conversation")
         resp = self.bot.conversation("py", "今天北京天气怎么样")
         logging.info("rc: %s", resp["rc"])
         logging.info("conversation: service provider [%s], logic_is_unexpected %s, logic_is_fallback %s", \
@@ -82,10 +78,10 @@ class Test(unittest.TestCase):
 
 
     def test_faq(self):
-        logging.info("test_faq %s:%d/api/v1/chatbot/%s", FLAGS.bot_ip, FLAGS.bot_port, FLAGS.bot_id)
+        logging.info("test_faq")
         
-        resp = self.bot.faq("py", "利息")
-        logging.info("rc: %s", resp["rc"])
+        resp = self.bot.faq("py", "你好")
+        logging.info("rc: %s \n\t%s", resp["rc"], resp)
         if resp["rc"] == 0:
             for x in resp["data"]:
                 logging.info("%f match: %s, reply: %s", x["score"], x["post"], x["reply"])
@@ -131,18 +127,17 @@ class Test(unittest.TestCase):
 
 def test():
     suite = unittest.TestSuite()
-    # suite.addTest(Test("test_conversation"))
-    # suite.addTest(Test("test_faq"))
-    # suite.addTest(Test("test_mute"))
-    # suite.addTest(Test("test_unmute"))
-    # suite.addTest(Test("test_ismute"))
+    suite.addTest(Test("test_conversation"))
+    suite.addTest(Test("test_faq"))
+    suite.addTest(Test("test_mute"))
+    suite.addTest(Test("test_unmute"))
+    suite.addTest(Test("test_ismute"))
     suite.addTest(Test("test_chats"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 
-def main(argv):
+def main():
     test()
 
 if __name__ == '__main__':
-    # FLAGS([__file__, '--verbosity', '1']) # DEBUG 1; INFO 0; WARNING -1
-    app.run(main)
+    main()

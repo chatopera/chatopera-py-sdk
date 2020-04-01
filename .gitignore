@@ -18,4 +18,4 @@ sftp-config.json
 dist/
 build/
 *.egg-info
-
+localrc

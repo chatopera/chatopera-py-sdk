@@ -1,4 +1,5 @@
 # Chatopera Python SDK
+
 Deliver Chatbots with [Chatopera Platform](https://bot.chatopera.com/) for your business.
 
 为企业聊天机器人而生。
@@ -11,7 +12,22 @@ pip install chatopera
 
 ## Usage
 
-Check out [demo](./demo.py).
+- Register Account
+
+```
+https://bot.chatopera.com
+```
+
+More docs [link](https://docs.chatopera.com/products/chatbot-platform/index.html).
+
+- Integration
+
+```
+bot = Chatbot(BOT_APP_ID, BOT_APP_SECRET)
+response = bot.faq("py", "你好")
+```
+
+Check out [demo](./demo.py) for details.
 
 ## 开源许可协议
 
