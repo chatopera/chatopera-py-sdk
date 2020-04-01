@@ -17,7 +17,7 @@ Welcome
 
 setup(
     name='chatopera',
-    version='1.0.0',
+    version='1.0.1',
     description='Deliver chatbot with Chatopera platform for Enterprises.',
     long_description=LONGDOC,
     author='Hai Liang Wang',

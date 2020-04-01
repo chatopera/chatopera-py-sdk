@@ -26,7 +26,7 @@ __version__      = "0.0.3"
 import os
 import sys
 curdir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(curdir + '/app')
+sys.path.insert(0, curdir + '/app')
 
 if sys.version_info[0] < 3:
     # raise "Must be using Python 3"
@@ -76,6 +76,11 @@ class Test(unittest.TestCase):
             for x in resp["data"]["faq"]:
                 logging.info("%f match: %s, reply: %s", x["score"], x["post"], x["reply"])
 
+    def test_detail(self):
+        logging.info("test_detail")
+        
+        resp = self.bot.detail()
+        logging.info("rc: %s \n\t%s", resp["rc"], resp)
 
     def test_faq(self):
         logging.info("test_faq")
@@ -127,12 +132,13 @@ class Test(unittest.TestCase):
 
 def test():
     suite = unittest.TestSuite()
-    suite.addTest(Test("test_conversation"))
-    suite.addTest(Test("test_faq"))
-    suite.addTest(Test("test_mute"))
-    suite.addTest(Test("test_unmute"))
-    suite.addTest(Test("test_ismute"))
-    suite.addTest(Test("test_chats"))
+    suite.addTest(Test("test_detail"))
+    # suite.addTest(Test("test_conversation"))
+    # suite.addTest(Test("test_faq"))
+    # suite.addTest(Test("test_mute"))
+    # suite.addTest(Test("test_unmute"))
+    # suite.addTest(Test("test_ismute"))
+    # suite.addTest(Test("test_chats"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 

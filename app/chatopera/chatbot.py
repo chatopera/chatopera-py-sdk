@@ -53,13 +53,31 @@ class Chatbot():
         self.sxpath = lambda x: S_BASE_PATH + "/" + self.app_id + x
         self.default_headers = dict({
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Expires": "-1",
+            "Cache-Control": "no-cache,no-store,must-revalidate,max-age=-1,private"
         })
 
+    def detail(self):
+        """
+        Get detail info about this bot
+        """
+        # add auth into headers
+        headers = copy.deepcopy(self.default_headers)
+        p = ""
+        headers["Authorization"] = generate(
+            self.app_id, self.app_secret, M_GET, self.sxpath(p))
+
+        resp = requests.get(
+            self.endpoint,
+            headers=headers)
+        return json.loads(resp.text, encoding="utf-8")        
+
     def faq(self, user_id, text_message):
-        '''
+        """
         Call FAQ API
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/faq/query"
@@ -84,9 +102,9 @@ class Chatbot():
             text_message,
             branch="master",
             is_debug=False):
-        '''
+        """
         Call conversation API
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/conversation/query"
@@ -108,9 +126,9 @@ class Chatbot():
         return json.loads(resp.text, encoding="utf-8")
 
     def mute(self, user_id):
-        '''
+        """
         Mute a USER
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/users/%s/mute" % user_id
@@ -121,9 +139,9 @@ class Chatbot():
         return json.loads(resp.text, encoding="utf-8")
 
     def unmute(self, user_id):
-        '''
+        """
         Unmute a USER
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/users/%s/unmute" % user_id
@@ -134,9 +152,9 @@ class Chatbot():
         return json.loads(resp.text, encoding="utf-8")
 
     def ismute(self, user_id):
-        '''
+        """
         Unmute a USER
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/users/%s/ismute" % user_id
@@ -154,9 +172,9 @@ class Chatbot():
             return None
 
     def profile(self, user_id):
-        '''
+        """
         Get user profile
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/users/%s/profile" % user_id
@@ -175,9 +193,9 @@ class Chatbot():
             return None
 
     def chats(self, user_id, limit=20, page=1, sortby="-lasttime"):
-        '''
+        """
         Get chats history
-        '''
+        """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
         p = "/users/%s/chats?limit=%d&page=%d&sortby=%s" % (
