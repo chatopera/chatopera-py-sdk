@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#=========================================================================
+# =========================================================================
 #
 # Copyright (c) 2018 <> All Rights Reserved
 #
@@ -8,10 +8,10 @@
 # Author: Hai Liang Wang
 # Date: 2019-03-11:20:01:43
 #
-#=========================================================================
+# =========================================================================
 
 """
-
+聊天机器人即服务
 """
 from __future__ import print_function
 from __future__ import division
@@ -20,14 +20,14 @@ __copyright__ = "Copyright (c) 2018 . All Rights Reserved"
 __author__ = "Hai Liang Wang"
 __date__ = "2019-03-11:20:01:43"
 
-
 import os
 import sys
+
 curdir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(curdir)
 
 if sys.version_info[0] < 3:
-    raise "Must be using Python 3"
+    raise BaseException("Must be using Python 3")
 else:
     unicode = str
 
@@ -37,6 +37,7 @@ import json
 from .misc import generate, M_POST, M_GET
 
 S_BASE_PATH = "/api/v1/chatbot"
+
 
 class Chatbot():
 
@@ -53,15 +54,12 @@ class Chatbot():
         self.sxpath = lambda x: S_BASE_PATH + "/" + self.app_id + x
         self.default_headers = dict({
             "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Expires": "-1",
-            "Cache-Control": "no-cache,no-store,must-revalidate,max-age=-1,private"
+            "Accept": "application/json"
         })
 
     def detail(self):
         """
-        Get detail info about this bot
+        获得聊天机器人详情
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -72,11 +70,11 @@ class Chatbot():
         resp = requests.get(
             self.endpoint,
             headers=headers)
-        return json.loads(resp.text, encoding="utf-8")        
+        return json.loads(resp.text, encoding="utf-8")
 
     def faq(self, user_id, text_message):
         """
-        Call FAQ API
+        查询机器人知识库
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -85,9 +83,9 @@ class Chatbot():
             self.app_id, self.app_secret, M_POST, self.sxpath(p))
 
         body = dict({
-                    "fromUserId": user_id,
-                    "query": text_message
-                    })
+            "fromUserId": user_id,
+            "query": text_message
+        })
         resp = requests.post(
             self.endpoint + p,
             headers=headers,
@@ -103,7 +101,7 @@ class Chatbot():
             branch="master",
             is_debug=False):
         """
-        Call conversation API
+        查询机器人多轮对话
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -112,11 +110,11 @@ class Chatbot():
             self.app_id, self.app_secret, M_POST, self.sxpath(p))
 
         body = dict({
-                    "fromUserId": user_id,
-                    "textMessage": text_message,
-                    "branch": branch,
-                    "isDebug": is_debug
-                    })
+            "fromUserId": user_id,
+            "textMessage": text_message,
+            "branch": branch,
+            "isDebug": is_debug
+        })
         resp = requests.post(
             self.endpoint + p,
             headers=headers,
@@ -127,7 +125,7 @@ class Chatbot():
 
     def mute(self, user_id):
         """
-        Mute a USER
+        屏蔽一个用户
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -140,7 +138,7 @@ class Chatbot():
 
     def unmute(self, user_id):
         """
-        Unmute a USER
+        取消屏蔽一个用户
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -153,7 +151,7 @@ class Chatbot():
 
     def ismute(self, user_id):
         """
-        Unmute a USER
+        查看一个用户是否被屏蔽
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -173,7 +171,7 @@ class Chatbot():
 
     def profile(self, user_id):
         """
-        Get user profile
+        查看用户画像
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -194,7 +192,7 @@ class Chatbot():
 
     def chats(self, user_id, limit=20, page=1, sortby="-lasttime"):
         """
-        Get chats history
+        获得聊天历史
         """
         # add auth into headers
         headers = copy.deepcopy(self.default_headers)
@@ -209,3 +207,67 @@ class Chatbot():
                 headers=headers).text,
             encoding="utf-8")
         return resp
+
+    def psychSearch(self, query, threshold=0.2):
+        """
+        技能：心理咨询查询接口
+        文档：[链接](https://docs.chatopera.com/products/psych-assistant/api.html#api-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89)
+        """
+        # add auth into headers
+        headers = copy.deepcopy(self.default_headers)
+        p = "/skills/psych/search"
+        headers["Authorization"] = generate(
+            self.app_id, self.app_secret, M_POST, self.sxpath(p))
+
+        body = dict({
+            "query": query,
+            "threshold": threshold
+        })
+
+        resp = json.loads(
+            requests.post(
+                self.endpoint + p,
+                headers=headers,
+                data=json.dumps(body, ensure_ascii=False).encode('utf-8')).text,
+            encoding="utf-8")
+
+        if "rc" in resp and resp["rc"] == 0:
+            return resp["data"]
+        if "rc" in resp and resp["rc"] == 2:
+            del resp["rc"]
+            return resp
+        else:
+            raise RuntimeError(
+                "Invalid response, error %s" % (resp["error"] if "error" in resp else None))
+
+
+    def psychChat(self, channel, channel_id, user_id, text_message):
+        """
+        技能：心理咨询聊天接口
+        文档：[链接](https://docs.chatopera.com/products/psych-assistant/api.html#api-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89)
+        """
+        # add auth into headers
+        headers = copy.deepcopy(self.default_headers)
+        p = "/skills/psych/chat"
+        headers["Authorization"] = generate(
+            self.app_id, self.app_secret, M_POST, self.sxpath(p))
+
+        body = dict({
+            "channel": channel,
+            "channelId": channel_id,
+            "userId": user_id,
+            "textMessage": text_message
+        })
+
+        resp = json.loads(
+            requests.post(
+                self.endpoint + p,
+                headers=headers,
+                data=json.dumps(body, ensure_ascii=False).encode('utf-8')).text,
+            encoding="utf-8")
+
+        if "rc" in resp and resp["rc"] == 0:
+            return resp["data"]
+        else:
+            raise RuntimeError(
+                "Invalid response, error %s" % (resp["error"] if "error" in resp else None))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#===============================================================================
+# ===============================================================================
 #
 # Copyright (c) 2018 <> All Rights Reserved
 #
@@ -9,7 +9,7 @@
 # Author: Hai Liang Wang
 # Date: 2019-03-11:20:03:56
 #
-#===============================================================================
+# ===============================================================================
 
 """
    
@@ -18,13 +18,13 @@ from __future__ import print_function
 from __future__ import division
 
 __copyright__ = "Copyright (c) 2018 . All Rights Reserved"
-__author__    = "Hai Liang Wang"
-__date__      = "2019-03-11:20:03:56"
-__version__      = "0.0.3"
-
+__author__ = "Hai Liang Wang"
+__date__ = "2019-03-11:20:03:56"
+__version__ = "0.0.3"
 
 import os
 import sys
+
 curdir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, curdir + '/app')
 
@@ -46,11 +46,13 @@ BOT_PROVIDER = os.environ.get("BOT_PROVIDER", "https://bot.chatopera.com")
 BOT_APP_ID = os.environ.get("BOT_APP_ID", None)
 BOT_APP_SECRET = os.environ.get("BOT_APP_SECRET", None)
 
+
 # run testcase: python /Users/hain/chatopera/chatopera-py-sdk/test.py Test.testExample
 class Test(unittest.TestCase):
     '''
     
     '''
+
     def setUp(self):
         self.bot = Chatbot(BOT_APP_ID, BOT_APP_SECRET, BOT_PROVIDER)
 
@@ -78,19 +80,18 @@ class Test(unittest.TestCase):
 
     def test_detail(self):
         logging.info("test_detail")
-        
+
         resp = self.bot.detail()
         logging.info("rc: %s \n\t%s", resp["rc"], resp)
 
     def test_faq(self):
         logging.info("test_faq")
-        
+
         resp = self.bot.faq("py", "你好")
         logging.info("rc: %s \n\t%s", resp["rc"], resp)
         if resp["rc"] == 0:
             for x in resp["data"]:
                 logging.info("%f match: %s, reply: %s", x["score"], x["post"], x["reply"])
-
 
     def test_mute(self):
         logging.info("test_mute")
@@ -130,6 +131,17 @@ class Test(unittest.TestCase):
         logging.info("test_chats")
         print(self.bot.chats("py", 2))
 
+    def test_psych_search(self):
+        logging.info("test_psych_search")
+        result = self.bot.psychSearch("确定自己是否有抑郁倾向，想要知道自己当下该怎么办", 0.8)
+        print("result: %s" % result)
+
+    def test_psych_chat(self):
+        logging.info("test_psych_chat")
+        result = self.bot.psychChat("sdk", "appid001", "u001", "确定自己是否有抑郁倾向，想要知道自己当下该怎么办")
+        print("result: %s" % result)
+
+
 def test():
     suite = unittest.TestSuite()
     suite.addTest(Test("test_detail"))
@@ -139,11 +151,15 @@ def test():
     # suite.addTest(Test("test_unmute"))
     # suite.addTest(Test("test_ismute"))
     # suite.addTest(Test("test_chats"))
+    suite.addTest(Test("test_psych_search"))
+    suite.addTest(Test("test_psych_chat"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 
+
 def main():
     test()
+
 
 if __name__ == '__main__':
     main()
