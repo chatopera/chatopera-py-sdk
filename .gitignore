@@ -19,3 +19,6 @@ dist/
 build/
 *.egg-info
 localrc
+.vscode
+Pipfile
+Pipfile.lock
