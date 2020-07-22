@@ -1,0 +1,18 @@
+<h1 class="code-line" data-line-start=1 data-line-end=2 ><a id="chatoperachatbot_1"></a>chatopera.chatbot</h1>
+<p class="has-line-data" data-line-start="3" data-line-end="4">聊天机器人即服务</p>
+<h2 class="code-line" data-line-start=6 data-line-end=7 ><a id="Chatbot_6"></a>Chatbot</h2>
+<pre><code class="has-line-data" data-line-start="8" data-line-end="13" class="language-python">Chatbot(self,
+        app_id,
+        app_secret=<span class="hljs-keyword">None</span>,
+        provider=<span class="hljs-string">'https://bot.chatopera.com'</span>)
+</code></pre>
+<h3 class="code-line" data-line-start=15 data-line-end=16 ><a id="command_15"></a>command</h3>
+<pre><code class="has-line-data" data-line-start="17" data-line-end="19" class="language-python">Chatbot.command(method, path, payload=<span class="hljs-keyword">None</span>)
+</code></pre>
+<p class="has-line-data" data-line-start="20" data-line-end="24">核心接口，详细介绍，<a href="https://docs.chatopera.com/products/chatbot-platform/integration.html">https://docs.chatopera.com/products/chatbot-platform/integration.html</a><br>
+Parameters:<br>
+method (string): HTTP Action, delete, put, post, get, etc.<br>
+path (string): URL 路径</p>
+<pre><code>Returns:
+        response (dict): JSON格式 dict 数据结构
+</code></pre>

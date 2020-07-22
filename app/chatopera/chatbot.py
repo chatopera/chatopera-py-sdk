@@ -58,6 +58,15 @@ class Chatbot():
         })
 
     def command(self, method, path, payload=None):
+        """
+        核心接口，详细介绍，https://docs.chatopera.com/products/chatbot-platform/integration.html
+            Parameters:
+                method (string): HTTP Action, delete, put, post, get, etc.
+                path (string): URL 路径
+
+            Returns:
+                    response (dict): JSON格式 dict 数据结构
+        """
         headers = copy.deepcopy(self.default_headers)
 
         method = method.upper()
@@ -83,113 +92,3 @@ class Chatbot():
                                 )
 
         return json.loads(resp.text, encoding="utf-8")
-
-    def detail(self):
-        """
-        获得聊天机器人详情
-        """
-        return self.command(M_GET, "/")
-
-    def faq(self, user_id, text_message):
-        """
-        查询机器人知识库
-        """
-        return self.command(M_POST, "/faq/query", dict({
-            "fromUserId": user_id,
-            "query": text_message
-        }))
-
-    def conversation(
-            self,
-            user_id,
-            text_message,
-            branch="master",
-            is_debug=False):
-        """
-        查询机器人多轮对话
-        """
-        return self.command(M_POST, "/conversation/query", dict({
-            "fromUserId": user_id,
-            "textMessage": text_message,
-            "branch": branch,
-            "isDebug": is_debug
-        }))
-
-    def mute(self, user_id):
-        """
-        屏蔽一个用户
-        """
-        return self.command(M_POST, "/users/%s/mute" % user_id)
-
-    def unmute(self, user_id):
-        """
-        取消屏蔽一个用户
-        """
-        return self.command(M_POST, "/users/%s/unmute" % user_id)
-
-    def ismute(self, user_id):
-        """
-        查看一个用户是否被屏蔽
-        """
-        resp = self.command(M_POST, "/users/%s/ismute" % user_id)
-
-        if resp["rc"] == 0:
-            return resp["data"]["mute"]
-        else:
-            print("[warn] chatbot.ismute: %s" % resp)
-            return None
-
-    def profile(self, user_id):
-        """
-        查看用户画像
-        """
-        resp = self.command(M_GET, "/users/%s/profile" % user_id)
-        # add auth into headers
-        headers = copy.deepcopy(self.default_headers)
-
-        if resp["rc"] == 0:
-            return resp["data"]
-        else:
-            print("[warn] chatbot.profile: %s" % resp)
-            return None
-
-    def chats(self, user_id, limit=20, page=1, sortby="-lasttime"):
-        """
-        获得聊天历史
-        """
-        return self.command(M_GET, "/users/%s/chats?limit=%d&page=%d&sortby=%s" % (
-            user_id, limit, page, sortby))
-
-    def psychSearch(self, query, threshold=0.2):
-        """
-        技能：心理咨询查询接口
-        文档：[链接](https://docs.chatopera.com/products/psych-assistant/api.html#api-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89)
-        """
-        resp = self.command(M_POST, "/skills/psych/search")
-
-        if "rc" in resp and resp["rc"] == 0:
-            return resp["data"]
-        if "rc" in resp and resp["rc"] == 2:
-            del resp["rc"]
-            return resp
-        else:
-            raise RuntimeError(
-                "Invalid response, error %s" % (resp["error"] if "error" in resp else None))
-
-    def psychChat(self, channel, channel_id, user_id, text_message):
-        """
-        技能：心理咨询聊天接口
-        文档：[链接](https://docs.chatopera.com/products/psych-assistant/api.html#api-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89)
-        """
-        resp = self.command(M_POST, "/skills/psych/chat", dict({
-            "channel": channel,
-            "channelId": channel_id,
-            "userId": user_id,
-            "textMessage": text_message
-        }))
-
-        if "rc" in resp and resp["rc"] == 0:
-            return resp["data"]
-        else:
-            raise RuntimeError(
-                "Invalid response, error %s" % (resp["error"] if "error" in resp else None))
