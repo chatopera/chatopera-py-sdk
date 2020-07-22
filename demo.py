@@ -61,7 +61,10 @@ class Test(unittest.TestCase):
 
     def test_conversation(self):
         logging.info("test_conversation")
-        resp = self.bot.conversation("py", "今天北京天气怎么样")
+        resp = self.bot.command("POST", "/conversation/query", dict({
+            "fromUserId": "py001",
+            "textMessage": "今天北京天气怎么样"
+        }))
         logging.info("rc: %s", resp["rc"])
         logging.info("conversation: service provider [%s], logic_is_unexpected %s, logic_is_fallback %s", \
                      resp["data"]["service"]["provider"], \
@@ -81,13 +84,16 @@ class Test(unittest.TestCase):
     def test_detail(self):
         logging.info("test_detail")
 
-        resp = self.bot.detail()
+        resp = self.bot.command("GET", "/")
         logging.info("rc: %s \n\t%s", resp["rc"], resp)
 
     def test_faq(self):
         logging.info("test_faq")
 
-        resp = self.bot.faq("py", "你好")
+        resp = self.bot.command("POST", "/faq/query", dict({
+            "fromUserId": "py001",
+            "query": "你好"
+        }))
         logging.info("rc: %s \n\t%s", resp["rc"], resp)
         if resp["rc"] == 0:
             for x in resp["data"]:
@@ -95,52 +101,8 @@ class Test(unittest.TestCase):
 
     def test_mute(self):
         logging.info("test_mute")
-        self.bot.mute("py")
-        resp = self.bot.conversation("py", "今天北京天气怎么样")
-        logging.info("rc: %s", resp["rc"])
-        logging.info("conversation: service provider [%s], logic_is_unexpected %s", \
-                     resp["data"]["service"]["provider"], \
-                     resp["data"]["logic_is_unexpected"])
-
-        assert resp["data"]["service"]["provider"] == "mute"
-        assert resp["data"]["logic_is_unexpected"] == False
-        logging.info(resp["data"]["string"])
-
-    def test_unmute(self):
-        logging.info("test_unmute")
-        self.bot.unmute("py")
-        resp = self.bot.conversation("py", "今天北京天气怎么样")
-        logging.info("rc: %s", resp["rc"])
-        logging.info("conversation: service provider [%s], logic_is_unexpected %s", \
-                     resp["data"]["service"]["provider"], \
-                     resp["data"]["logic_is_unexpected"])
-
-        assert resp["data"]["service"]["provider"] == "fallback"
-        assert resp["data"]["logic_is_unexpected"] == True
-        logging.info(resp["data"]["string"])
-
-    def test_ismute(self):
-        logging.info("test_ismute")
-        print(self.bot.ismute("py"))
-
-    def test_profile(self):
-        logging.info("test_profile")
-        print(self.bot.profile("py"))
-
-    def test_chats(self):
-        logging.info("test_chats")
-        print(self.bot.chats("py", 2))
-
-    def test_psych_search(self):
-        logging.info("test_psych_search")
-        result = self.bot.psychSearch("确定自己是否有抑郁倾向，想要知道自己当下该怎么办", 0.8)
-        print("result: %s" % result)
-
-    def test_psych_chat(self):
-        logging.info("test_psych_chat")
-        result = self.bot.psychChat("sdk", "appid001", "u001", "确定自己是否有抑郁倾向，想要知道自己当下该怎么办")
-        print("result: %s" % result)
-
+        resp = self.bot.command("POST", "/users/%s/mute" % "py001")
+        logging.info("response: %s", resp)
 
 def test():
     suite = unittest.TestSuite()
@@ -148,11 +110,6 @@ def test():
     # suite.addTest(Test("test_conversation"))
     # suite.addTest(Test("test_faq"))
     # suite.addTest(Test("test_mute"))
-    # suite.addTest(Test("test_unmute"))
-    # suite.addTest(Test("test_ismute"))
-    # suite.addTest(Test("test_chats"))
-    suite.addTest(Test("test_psych_search"))
-    suite.addTest(Test("test_psych_chat"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 
