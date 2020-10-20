@@ -15,6 +15,10 @@
 """
 from __future__ import print_function
 from __future__ import division
+import requests
+import copy
+import json
+from .misc import generate, M_POST, M_GET
 
 __copyright__ = "Copyright (c) 2018 . All Rights Reserved"
 __author__ = "Hai Liang Wang"
@@ -31,10 +35,6 @@ if sys.version_info[0] < 3:
 else:
     unicode = str
 
-from .misc import generate, M_POST, M_GET
-import json
-import copy
-import requests
 
 S_BASE_PATH = "/api/v1/chatbot"
 
@@ -53,9 +53,40 @@ class Chatbot():
         # signature path param
         self.sxpath = lambda x: S_BASE_PATH + "/" + self.app_id + x
         self.default_headers = dict({
-            "Content-Type": "application/json",
             "Accept": "application/json"
         })
+
+    def arsRecognize(self, path, headers, payload):
+        body = {
+            'type': payload['type'],
+            'nbest': payload.get('nbest', 5),
+            'pos': payload.get('pos', "0"),
+            'fromUserId': payload['fromUserId']
+        }
+
+        resp = None
+
+        if(payload['type'] == 'base64'):
+            body['data'] = payload['data']
+            headers["Content-Type"] = "application/json"
+            data = json.dumps(
+                body,
+                ensure_ascii=False).encode('utf-8')
+            resp = requests.request('POST',
+                                    self.endpoint + path,
+                                    headers=headers,
+                                    data=data
+                                    )
+        else:
+            resp = requests.request('POST',
+                                    self.endpoint + path,
+                                    headers=headers,
+                                    data=body,
+                                    files=[('file', open(payload['filepath'], 'rb'))])
+
+        print(resp.text)
+
+        return json.loads(resp.text, encoding="utf-8")
 
     def command(self, method, path, payload=None):
         """
@@ -71,6 +102,8 @@ class Chatbot():
 
         method = method.upper()
 
+        orginPath = path
+
         if "?" in path:
             path = path+"&sdklang=python"
         else:
@@ -80,6 +113,10 @@ class Chatbot():
             self.app_id, self.app_secret, method, self.sxpath(path))
 
         data = None
+
+        if(method == 'POST' and orginPath == '/asr/recognize'):
+            return self.arsRecognize(path, headers, payload)
+
         if(payload != None):
             data = json.dumps(
                 payload,
