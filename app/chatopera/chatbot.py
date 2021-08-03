@@ -128,4 +128,4 @@ class Chatbot():
                                 data=data
                                 )
 
-        return json.loads(resp.text, encoding="utf-8")
+        return json.loads(resp.text)

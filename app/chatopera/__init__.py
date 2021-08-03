@@ -3,7 +3,9 @@ __all__ = [
     "__author__",
     "__date__",
     "__version__",
-    "Chatbot"
+    "Chatbot",
+    "Chatopera"
 ]
 
 from .chatbot import *
+from .chatopera import *
