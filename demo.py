@@ -124,7 +124,7 @@ class Test(unittest.TestCase):
         logging.info("create bot %s >> %s ...", bot_name, payload)
         resp = self.admin.command("POST", "/chatbot", payload)
         logging.info("response: %s", resp)
-        
+
 
 def test():
     suite = unittest.TestSuite()

@@ -109,6 +109,7 @@ class Chatbot():
         else:
             path = path+"?sdklang=python"
 
+        headers["Content-Type"] = "application/json"
         headers["Authorization"] = generate(
             self.app_id, self.app_secret, method, self.sxpath(path))
 

@@ -33,7 +33,8 @@ class Chatopera():
         self.provider = provider
         self.endpoint = "%s%s" % (provider, BASE_PATH)
         self.default_headers = dict({
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "Content-Type": "application/json"
         })
 
     def command(self, method, path, payload=None):
