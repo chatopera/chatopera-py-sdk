@@ -21,7 +21,7 @@ https://bot.chatopera.com/
 
 setup(
     name='chatopera',
-    version='2.0.0',
+    version='2.1.0',
     description='定制化聊天机器人服务',
     long_description=LONGDOC,
     author='Hai Liang Wang',
