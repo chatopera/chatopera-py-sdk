@@ -1,6 +1,12 @@
-# Chatopera Python SDK
+# Chatopera Node.js SDK
 
-[Chatopera 云服务](https://bot.chatopera.com/) 实现定制化聊天机器人服务。
+---
+
+https://bot.chatopera.com
+
+低代码或无代码方式定制智能对话机器人！
+
+[Chatopera](https://www.chatopera.com/) 提供聊天机器人开发者平台，Chatopera SDK 用于在 Python 应用中集成[聊天机器人服务](https://bot.chatopera.com/)。
 
 ## 安装
 
@@ -11,9 +17,12 @@ pip install chatopera
 实例化机器人
 
 ```python
-Chatbot(app_id="机器人设置页面获取",
+from chatopera import Chatopera, Chatbot
+bot = Chatbot(app_id="机器人设置页面获取",
         app_secret="机器人设置页面获取",
         provider='https://bot.chatopera.com')
+admin = Chatopera(access_token="机器人平台访问设置页面获取",
+    provider='https://bot.chatopera.com')
 ```
 
 ## 使用说明

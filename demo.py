@@ -34,7 +34,8 @@ if sys.version_info[0] < 3:
 else:
     unicode = str
 
-from chatopera import Chatbot
+from chatopera import Chatopera, Chatbot
+import time
 import logging
 
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO').upper()
@@ -45,6 +46,7 @@ import unittest
 BOT_PROVIDER = os.environ.get("BOT_PROVIDER", "https://bot.chatopera.com")
 BOT_APP_ID = os.environ.get("BOT_APP_ID", None)
 BOT_APP_SECRET = os.environ.get("BOT_APP_SECRET", None)
+BOT_ACCESS_TOKEN = os.environ.get("BOT_ACCESS_TOKEN", None)
 
 
 # run testcase: python /Users/hain/chatopera/chatopera-py-sdk/test.py Test.testExample
@@ -55,6 +57,7 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         self.bot = Chatbot(BOT_APP_ID, BOT_APP_SECRET, BOT_PROVIDER)
+        self.admin = Chatopera(BOT_ACCESS_TOKEN, BOT_PROVIDER)
 
     def tearDown(self):
         pass
@@ -104,12 +107,33 @@ class Test(unittest.TestCase):
         resp = self.bot.command("POST", "/users/%s/mute" % "py001")
         logging.info("response: %s", resp)
 
+    def test_getchatbots(self):
+        logging.info("test_getchatbots")
+        resp = self.admin.command("GET", "/chatbot")
+        logging.info("response: %s", resp)
+
+    def test_createchatbot(self):
+        logging.info("test_createchatbot")
+        bot_name = "TestPy" + str(time.time_ns() // 1000)
+        payload = dict({
+            "name": bot_name,
+            "description": "Hello",
+            "primaryLanguage": "zh_CN",
+            "trans_zhCN_ZhTw2ZhCn": False
+        })
+        logging.info("create bot %s >> %s ...", bot_name, payload)
+        resp = self.admin.command("POST", "/chatbot", payload)
+        logging.info("response: %s", resp)
+        
+
 def test():
     suite = unittest.TestSuite()
-    suite.addTest(Test("test_detail"))
+    # suite.addTest(Test("test_detail"))
     # suite.addTest(Test("test_conversation"))
     # suite.addTest(Test("test_faq"))
     # suite.addTest(Test("test_mute"))
+    # suite.addTest(Test("test_getchatbots"))
+    suite.addTest(Test("test_createchatbot"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 
