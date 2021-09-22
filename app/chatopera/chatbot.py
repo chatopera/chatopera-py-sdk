@@ -18,6 +18,7 @@ from __future__ import division
 import requests
 import copy
 import json
+from six import PY2
 from .misc import generate, M_POST, M_GET
 
 __copyright__ = "Copyright (c) 2018 . All Rights Reserved"
@@ -31,7 +32,8 @@ curdir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(curdir)
 
 if sys.version_info[0] < 3:
-    raise BaseException("Must be using Python 3")
+    #raise BaseException("Must be using Python 3")
+    pass
 else:
     unicode = str
 
@@ -119,7 +121,12 @@ class Chatbot():
             return self.arsRecognize(path, headers, payload)
 
         if(payload != None):
-            data = json.dumps(
+            if PY2:
+                data = json.dumps(
+                payload,
+                ensure_ascii=False)
+            else:
+                data = json.dumps(
                 payload,
                 ensure_ascii=False).encode('utf-8')
 

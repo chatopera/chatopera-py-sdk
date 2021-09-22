@@ -17,7 +17,8 @@ import json
 import sys
 
 if sys.version_info[0] < 3:
-    raise BaseException("Must be using Python 3")
+    #raise BaseException("Must be using Python 3")
+    pass
 else:
     unicode = str
 

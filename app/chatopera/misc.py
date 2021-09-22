@@ -23,7 +23,8 @@ curdir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(curdir)
 
 if sys.version_info[0] < 3:
-    raise RuntimeError("Must be using Python 3")
+    #raise BaseException("Must be using Python 3")
+    pass
 else:
     unicode = str
 
@@ -37,6 +38,7 @@ import hashlib
 import time
 import random
 import base64
+from builtins import bytes
 
 # 常量
 M_POST = "POST"

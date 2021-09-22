@@ -66,16 +66,15 @@ class Test(unittest.TestCase):
         logging.info("test_conversation")
         resp = self.bot.command("POST", "/conversation/query", dict({
             "fromUserId": "py001",
-            "textMessage": "今天北京天气怎么样"
+            "textMessage": "你好"
         }))
-        logging.info("rc: %s", resp["rc"])
-        logging.info("conversation: service provider [%s], logic_is_unexpected %s, logic_is_fallback %s", \
+        logging.info("rc: %s", resp)
+        logging.info("conversation: service provider [%s], logic_is_fallback %s", \
                      resp["data"]["service"]["provider"], \
-                     resp["data"]["logic_is_unexpected"], \
                      resp["data"]["logic_is_fallback"])
 
-        assert resp["data"]["service"]["provider"] == "mute"
-        assert resp["data"]["logic_is_unexpected"] == False
+        # assert resp["data"]["service"]["provider"] == "mute"
+        assert resp["data"]["logic_is_fallback"] == False
 
         logging.info(resp["data"]["string"])
 
@@ -129,11 +128,11 @@ class Test(unittest.TestCase):
 def test():
     suite = unittest.TestSuite()
     # suite.addTest(Test("test_detail"))
-    # suite.addTest(Test("test_conversation"))
+    suite.addTest(Test("test_conversation"))
     # suite.addTest(Test("test_faq"))
     # suite.addTest(Test("test_mute"))
     # suite.addTest(Test("test_getchatbots"))
-    suite.addTest(Test("test_createchatbot"))
+    # suite.addTest(Test("test_createchatbot"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
 

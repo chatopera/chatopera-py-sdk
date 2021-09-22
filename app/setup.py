@@ -7,7 +7,7 @@ Chatopera Python SDK
 Chatopera 云服务，实现定制化聊天机器人服务。
 https://bot.chatopera.com/
 
-为企业聊天机器人而生。
+低代码上线智能对话机器人！
 
 * 支持自定义知识库语料/查询知识库
 * 支持多轮对话
@@ -21,7 +21,7 @@ https://bot.chatopera.com/
 
 setup(
     name='chatopera',
-    version='2.1.0',
+    version='2.2.1',
     description='定制化聊天机器人服务',
     long_description=LONGDOC,
     author='Hai Liang Wang',
@@ -36,13 +36,16 @@ setup(
         'Natural Language :: Chinese (Simplified)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 2',
         'Topic :: Communications :: Chat',
         'Topic :: Text Processing :: Indexing',
         'Topic :: Text Processing :: Linguistic'],
     keywords='chatbot,machine-learning,IR',
     packages=find_packages(),
     install_requires=[
-        'requests>=2.20.0'
+        'requests>=2.20.0',
+        'future>=0.18.2',
+        'six>=1.16.0'
     ],
     package_data={
         'chatopera': [
