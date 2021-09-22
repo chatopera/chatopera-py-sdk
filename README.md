@@ -1,6 +1,6 @@
 # Chatopera Python SDK
 
----
+[![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/release/python-360/) [![Python 2](https://img.shields.io/badge/python-2-blue.svg)](https://www.python.org/downloads/release/python-2/)
 
 https://bot.chatopera.com
 
@@ -18,11 +18,13 @@ pip install chatopera
 
 ```python
 from chatopera import Chatopera, Chatbot
+# 管理 BOT CLENT: 创建 ，删除，查看
+admin = Chatopera(access_token="机器人平台访问设置页面获取",
+    provider='https://bot.chatopera.com')
+# BOT CLIENT
 bot = Chatbot(app_id="机器人设置页面获取",
         app_secret="机器人设置页面获取",
         provider='https://bot.chatopera.com')
-admin = Chatopera(access_token="机器人平台访问设置页面获取",
-    provider='https://bot.chatopera.com')
 ```
 
 ## 使用说明

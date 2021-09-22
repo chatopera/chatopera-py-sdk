@@ -19,11 +19,10 @@ else
     exit 1
 fi
 
-python2.7 demo.py
-
-if [ ! $? -eq 0 ]; then
-    echo "FAIL WITH Python2.7"
-    exit 1
-fi
+# python2.7 demo.py
+# if [ ! $? -eq 0 ]; then
+#     echo "FAIL WITH Python2.7"
+#     exit 1
+# fi
 
 python3 demo.py
