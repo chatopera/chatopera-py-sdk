@@ -2,7 +2,7 @@
 
 [![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/release/python-360/) [![Python 2](https://img.shields.io/badge/python-2-blue.svg)](https://www.python.org/downloads/release/python-2/)
 
-https://bot.chatopera.com
+<https://bot.chatopera.com>
 
 低代码或无代码方式定制智能对话机器人！
 
@@ -29,9 +29,9 @@ bot = Chatbot(app_id="机器人设置页面获取",
 
 ## 使用说明
 
-快速开始，类接口定义和实例化文档等，参考 [文档中心](https://docs.chatopera.com/products/chatbot-platform/integration.html)：
+快速开始，类接口定义和实例化文档等，参考 [文档中心](https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html)：
 
-[https://docs.chatopera.com/products/chatbot-platform/integration.html](https://docs.chatopera.com/products/chatbot-platform/integration.html)
+[https://docs.chatopera.com/products/chatbot-platform/integration.html](https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html)
 
 ## 贡献代码
 
