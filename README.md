@@ -31,7 +31,7 @@ bot = Chatbot(app_id="机器人设置页面获取",
 
 快速开始，类接口定义和实例化文档等，参考 [文档中心](https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html)：
 
-[https://docs.chatopera.com/products/chatbot-platform/integration.html](https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html)
+[https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html](https://docs.chatopera.com/products/chatbot-platform/references/sdk/index.html)
 
 ## 贡献代码
 
